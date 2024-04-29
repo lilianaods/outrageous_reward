@@ -25,7 +25,6 @@ describe("AddTask Controller", () => {
     );
 
     const httpResponse = await addTaskController.handle(httpRequest);
-    console.log(httpResponse);
 
     expect(httpResponse.statusCode).toBe(201);
     expect(httpResponse.body.title).toBe("any_title");
