@@ -1,6 +1,7 @@
 import { Task } from "../../../entities/task";
 import { AddTask } from "../../../usecases";
 import { HttpRequest, Validation } from "../../interfaces";
+import { serverError } from "../../presentations/api/httpResponses/httpResponses";
 import { AddTaskController } from "./addTask";
 
 interface SutType {
@@ -67,5 +68,24 @@ describe("AddTask Controller", () => {
       description: "any_description",
       date: "30/06/2024",
     });
+  });
+
+  test("Deve retornar 500 se AddTask lançar um erro", async () => {
+    const { sut, addTaskStub } = makeSut();
+    jest
+      .spyOn(addTaskStub, "add")
+      .mockImplementationOnce(async () => Promise.reject(new Error()));
+    const httpResponse = await sut.handle(makeFakeRequest());
+
+    expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  test("Deve chamar Validation com os valores corretos", async () => {
+    const { sut, validationStub } = makeSut();
+    const validateSpy = jest.spyOn(validationStub, "validate");
+
+    await sut.handle(makeFakeRequest());
+
+    expect(validateSpy).toHaveBeenCalledWith(makeFakeRequest().body);
   });
 });
