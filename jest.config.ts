@@ -2,6 +2,7 @@ import type { Config } from "jest";
 
 const config: Config = {
   collectCoverage: false,
+  preset: "@shelf/jest-mongodb",
   collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
   coverageDirectory: "coverage",
   coverageProvider: "v8",
