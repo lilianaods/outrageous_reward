@@ -10,11 +10,17 @@ import {
   DeleteTaskModel,
   DeleteTaskRepository,
   ListTasksRepository,
+  UpdateTaskModel,
+  UpdateTaskRepository,
 } from "../../../usecases";
 import { MongoManager } from "../../config/mongoManager";
 
 export class TaskMongoRepository
-implements AddTaskRepository, DeleteTaskRepository, ListTasksRepository
+implements
+    AddTaskRepository,
+    DeleteTaskRepository,
+    ListTasksRepository,
+    UpdateTaskRepository
 {
   async add(taskData: AddTaskModel): Promise<Task> {
     const taskCollection = MongoManager.getInstance().getCollection("tasks");
@@ -54,5 +60,33 @@ implements AddTaskRepository, DeleteTaskRepository, ListTasksRepository
       description: task.description,
       date: task.date,
     }));
+  }
+
+  async update(taskData: UpdateTaskModel): Promise<Error | void> {
+    const taskCollection = MongoManager.getInstance().getCollection("tasks");
+
+    if (!ObjectId.isValid(taskData.id)) {
+      return new InvalidParamError(taskData.id);
+    }
+
+    const updateFields: any = {};
+    if (taskData.title !== undefined) {
+      updateFields.title = taskData.title;
+    }
+    if (taskData.description !== undefined) {
+      updateFields.description = taskData.description;
+    }
+    if (taskData.date !== undefined) {
+      updateFields.date = taskData.date;
+    }
+
+    const { modifiedCount } = await taskCollection.updateOne(
+      { _id: new ObjectId(taskData.id) },
+      { $set: updateFields }
+    );
+
+    if (modifiedCount === 0) {
+      return new NotFoundError("task");
+    }
   }
 }
