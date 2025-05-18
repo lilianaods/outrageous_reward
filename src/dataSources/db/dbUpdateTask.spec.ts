@@ -33,7 +33,7 @@ const makeSut = (): SutType => {
 
   return {
     sut,
-    updateTaskRepositoryStub: updateTaskRepositoryStub,
+    updateTaskRepositoryStub,
   };
 };
 
@@ -55,7 +55,7 @@ describe("DbListTasks", () => {
       .spyOn(updateTaskRepositoryStub, "update")
       .mockRejectedValueOnce(new Error());
 
-    const promise = await sut.update(makeFakeTask());
+    const promise = sut.update(makeFakeTask());
 
     await expect(promise).rejects.toThrow();
   });

@@ -8,6 +8,6 @@ export class DbUpdateTask implements UpdateTask {
   constructor(private readonly updateTaskRepository: UpdateTaskRepository) {}
 
   async update(taskData: UpdateTaskModel): Promise<Error | void> {
-    await this.updateTaskRepository.update(taskData);
+    return await this.updateTaskRepository.update(taskData);
   }
 }
