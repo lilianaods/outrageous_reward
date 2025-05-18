@@ -3,4 +3,5 @@ export * from "./deleteTask";
 export * from "./listTasks";
 export * from "./repository/addTaskRepository";
 export * from "./repository/deleteTaskRepository";
+export * from "./repository/listTasksRepository";
 export * from "./repository/logErrorRepository";
