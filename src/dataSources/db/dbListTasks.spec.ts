@@ -55,4 +55,24 @@ describe("DbListTasks", () => {
 
     expect(listSpy).toHaveBeenCalled();
   });
+
+  test("It should return a list of tasks on success", async () => {
+    const { sut } = makeSut();
+
+    const tasks = await sut.list();
+
+    expect(tasks).toEqual(makeFakeTasks());
+  });
+
+  test("It should throw an error if ListTasksRepository throws an error", async () => {
+    const { sut, listTasksRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(listTasksRepositoryStub, "list")
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    const promise = sut.list();
+
+    await expect(promise).rejects.toThrow();
+  });
 });
