@@ -25,12 +25,14 @@ describe("TaskMongoRepository", () => {
   test("It should return task on success case", async () => {
     const { sut } = makeSut();
 
-    const task = await sut.add({
-      title: "Test Task",
-      description: "Test Description",
-      date: "Test Date",
+    await sut.add({
+      title: "any_title",
+      description: "any_description",
+      date: "any_date",
     });
+    const tasks = await sut.list();
 
-    expect(task.id).toBeTruthy();
+    expect(tasks[0].id).toBeTruthy();
+    expect(tasks.length).toBe(1);
   });
 });
