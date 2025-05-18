@@ -5,3 +5,4 @@ export * from "./repository/addTaskRepository";
 export * from "./repository/deleteTaskRepository";
 export * from "./repository/listTasksRepository";
 export * from "./repository/logErrorRepository";
+export * from "./updateTask";
